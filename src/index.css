@@ -1,0 +1,7 @@
+/* Intializes Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bowlby+One&family=Press+Start+2P&display=swap');
+
+/* Intializes TailwindCSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
