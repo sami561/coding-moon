@@ -16,7 +16,6 @@ import PokemonType from '../../types/pokemon';
 const Move: FC<MovePropsType> = (props: MovePropsType) => {
   // Props
   const { move, battle, game }: MovePropsType = props;
-
   // States
   const setBattle: SetterOrUpdater<BattleType> = useSetRecoilState<BattleType>(battleState);
   const setGame: SetterOrUpdater<GameType> = useSetRecoilState<GameType>(gameState);
@@ -35,6 +34,7 @@ const Move: FC<MovePropsType> = (props: MovePropsType) => {
     let newTeam1: PokemonType[] = [...battle.team1];
     let newSquirtle: PokemonType = {...battle.team1[0]};
     let newTeam2: PokemonType[] = [...battle.team2];
+    let newTeam3: PokemonType[] = [...battle.team2];
     let newOnix: PokemonType = {...battle.team2[0]};
 
     // Selects a random move for Onix
@@ -56,7 +56,7 @@ const Move: FC<MovePropsType> = (props: MovePropsType) => {
     setTimeout((): void => {
       // Playing the audio sound of the Squirtle move depending of the move name
       audio = new Audio(`sfx/${move.moveName.replace(/ /g,'')}.wav`);
-  
+
       // Checks if the SFX are enabled in the game global state
       if (game.enableSFX) {
         audio.play();
@@ -64,7 +64,8 @@ const Move: FC<MovePropsType> = (props: MovePropsType) => {
 
       // Takes Squirtle damages to Onix HP then plays Squirtle attack animation
       newOnix.currentHP -= squirtleDamages;
-      newTeam2[0] = {...newOnix, currentAnimation: 'OnixStance'};
+      newTeam2[0] = {...newOnix, currentAnimation: 'charizar'};
+      newTeam3[0] = {...newOnix, currentAnimation: 'OnixStance'};
       newTeam1[0] = {...newSquirtle, currentAnimation: 'SquirtleAttack'};
 
       // Checks Onix current HP then fixing it to 0 if its going under 0
@@ -84,6 +85,7 @@ const Move: FC<MovePropsType> = (props: MovePropsType) => {
         enableUI: false,
         team1: [...newTeam1],
         team2: [...newTeam2]
+
       });
     }, 500);
 
@@ -112,7 +114,7 @@ const Move: FC<MovePropsType> = (props: MovePropsType) => {
     setTimeout((): void => {
       // Playing the audio sound of the Onix move depending of the move name
       audio = new Audio(`sfx/${onixMove.moveName.replace(/ /g,'')}.wav`);
-  
+
       // Checks if the SFX are enabled in the game global state
       if (game.enableSFX) {
         audio.play();
@@ -121,8 +123,8 @@ const Move: FC<MovePropsType> = (props: MovePropsType) => {
       // Takes Onix damages to Squirtle HP then plays Onix attack animation
       newSquirtle.currentHP -= onixDamages;
       newTeam1[0] = {...newSquirtle, currentAnimation: 'SquirtleStance'};
-      newTeam2[0] = {...newOnix, currentAnimation: 'OnixAttack'};
-
+      newTeam2[0] = {...newOnix, currentAnimation: 'charizar'};
+      newTeam3[0] = {...newOnix, currentAnimation: 'OnixStance'};
       // Checks Squirtle current HP then fixing it to 0 if its going under 0
       {
         (
@@ -144,7 +146,8 @@ const Move: FC<MovePropsType> = (props: MovePropsType) => {
     }, 4600);
 
     setTimeout((): void => {
-      newTeam2[0] = {...newOnix, currentAnimation: 'OnixStance'};
+      newTeam2[0] = {...newOnix, currentAnimation: 'charizar'};
+      newTeam3[0] = {...newOnix, currentAnimation: 'OnixStance'};
 
       setBattle({
         ...battle,
@@ -176,7 +179,7 @@ const Move: FC<MovePropsType> = (props: MovePropsType) => {
         });
 
         setTimeout((): void => {
-          setGame({...game, currentScreen: 'Title'});
+          setGame({...game, currentScreen: ''});
         }, 2000);
       } else if (newSquirtle.currentHP === 0) {
         setBattle({
@@ -188,7 +191,12 @@ const Move: FC<MovePropsType> = (props: MovePropsType) => {
         });
 
         setTimeout((): void => {
-          setGame({...game, currentScreen: 'Title'});
+          console.log( "game.currentScreen",game.currentScreen)
+          if (game.currentScreen === 'Battle') {
+            setGame({ ...game, currentScreen: 'BattleLV2' });
+          } else if (game.currentScreen === 'BattleLV2') {
+            setGame({ ...game, currentScreen: 'BattleLV3' });
+          }
         }, 2000);
       } else {
         setBattle({
@@ -201,7 +209,7 @@ const Move: FC<MovePropsType> = (props: MovePropsType) => {
       }
     }, 8700);
   }
-  
+
   return (
     <button onClick={useMove} className='bg-gradient-to-r from-cyan-400 to-green-400 shadow-xl shadow-green-400/50 rounded-xl ring-4 ring-cyan-400/50 border-2 border-white md:w-64 w-48 p-2 text-sm font-semibold drop-shadow hover:scale-105 duration-100'>
       <p>{move.moveName}</p>
