@@ -10,6 +10,7 @@ import Battle from './screens/Battle';
 import Title from './screens/Title';
 import BattleLV2 from "./screens/BattleLV2"
 import BattleLV3 from "./screens/BattleLV3"
+import Login from './screens/Login'
 // States
 import gameState from './atoms/game';
 
@@ -35,7 +36,7 @@ const App: FC = () => {
   }, [setGame]);
 
   return (
-    <Router> <>
+    <>
     {
       game.bgm && game.bgm.length > 0
         ?
@@ -43,17 +44,29 @@ const App: FC = () => {
         :
           null
     }
-
-
+    {
+      (
+        game && game.currentScreen === 'Battle'
+      ) ? (
+        <Battle game={game}/>
+      ) : (
+        null
+      )
+    }
+    {
+      (
+        game && game.currentScreen === 'Title'
+      ) ? (
+        <Title game={game} />
+      ) : (
+        null
+      )
+    }
       {game.currentScreen === "BattleLV2" && <BattleLV2 game={game} />}
       {game.currentScreen === "BattleLV3" && <BattleLV3 game={game} />}
-      <Routes>
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/shop" element={<ShopPage game={game} />} />
-        <Route path="/battle" element={<Battle game={game} /> } />
-        <Route path="/" element={<Title game={game} />} />
-      </Routes>
-  </></Router>
+      {game.currentScreen === "shop" && <ShopPage  game={game}/>}
+
+  </>
 
   );
 };

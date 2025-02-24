@@ -6,14 +6,13 @@ import BearAvatar from '../components/BearAvatar';
 import Input from '../components/Input';
 import EyeIconSrc from '/src/assets/icons/eye_on.svg';
 import EyeOffIconSrc from '/src/assets/icons/eye_off.svg';
-import BackgroundImage from '/src/assets/img/back.png'; 
-
+import BackgroundImage from '/src/assets/img/back.png';
+import { SetterOrUpdater } from 'recoil';
 export default function LoginForm() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [values, setValues] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
 
   const { watchBearImages, hideBearImages, peakBearImages } = useBearImages();
   const {
@@ -28,12 +27,24 @@ export default function LoginForm() {
     emailLength: values.email.length,
     showPassword,
   });
+const game=""
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // Here you would typically handle the login logic
     localStorage.setItem('isAuthenticated', 'true');
-    navigate('/');
+    const audio: HTMLAudioElement = new Audio("sfx/Ok.wav");
+
+    // Checks if the SFX are enabled in the game global state
+
+  // Checks if the SFX are enabled in the game global state
+  if (game) {
+    audio.play();
+  }
+
+  // Navigate back to the previous screen
+  const newGame = { game, currentScreen: "Title" };
+    // Changes the current screen of the game global state
   };
 
   const togglePassword = () => {

@@ -33,7 +33,7 @@ import { Button } from "react-bootstrap";
 
 const Title: FC<ScreenType> = (props: ScreenType) => {
   // Allows wrapped components to access Recoil Root
-  const navigate = useNavigate();
+
   const RecoilBridge: FC<{ children: ReactNode }> =
     useRecoilBridgeAcrossReactRoots_UNSTABLE();
 
@@ -59,15 +59,24 @@ const Title: FC<ScreenType> = (props: ScreenType) => {
     // Changes the current screen of the game global state
     setGame(newGame);
   };
+  const changeScreenlogin= (): void => {
+    // Initializes a new SFX sound
+    const audio: HTMLAudioElement = new Audio("sfx/Ok.wav");
+
+    // Checks if the SFX are enabled in the game global state
+    if (game.enableSFX) {
+      audio.play();
+    }
+
+    const newGame: GameType = { ...game, currentScreen: "shop" };
+
+    // Changes the current screen of the game global state
+    setGame(newGame);
+  };
 
   // Sets the current BGM sound played to 'Title' to the global game state
   useSetBGM("Title");
-  const goToLogin = (): void => {
-    navigate("/login");
-  };
-  const handelshop = (): void => {
-    navigate("/shop");
-  };
+
   return (
     <div className="absolute h-full w-full bg-black">
       <Canvas>
@@ -84,15 +93,18 @@ const Title: FC<ScreenType> = (props: ScreenType) => {
             >
               Click to play
             </button>
-            <button
-              onClick={goToLogin}
+
+           <button
+              onClick={changeScreenlogin}
               className="absolute right-10 top-10 py-4 px-8  bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold"
             >
-              Login
+              shop
             </button>
+
+            {/*
             <button onClick={handelshop}  className="absolute right-60 top-10 py-4 px-8  bg-blue-500 hover:bg-green-600 text-white rounded-lg font-semibold">
               shop
-              </button>
+              </button> */}
           </div>
         </Html>
         {/* Initializes 3d elements */}

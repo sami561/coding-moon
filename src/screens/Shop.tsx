@@ -43,7 +43,7 @@ const ShopPage: FC<ScreenType> = (props: ScreenType) => {
     { id: 'charmander', name: 'Charmander', price: 500, color: '#FF4500' },
     { id: 'pikachu', name: 'Pikachu', price: 300, color: '#FFE870' },
     { id: 'bulbasaur', name: 'Bulbasaur', price: 400, color: '#F5BD30' },
-    
+
   ];
 
   const handlePurchase = (id: string, price: number) => {
@@ -56,14 +56,14 @@ const ShopPage: FC<ScreenType> = (props: ScreenType) => {
   };
 
   const goToDashboard = (): void => {
-    // Initializes a new SFX sound  
+    // Initializes a new SFX sound
     const audio: HTMLAudioElement  = new Audio('sfx/Ok.wav');
 
     // Checks if the SFX are enabled in the game global state
     if (game.enableSFX) {
       audio.play();
     }
-    
+
     const newGame: GameType = {...game, currentScreen: 'Title'};
 
     // Changes the current screen of the game global state
